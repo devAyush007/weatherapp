@@ -3,14 +3,15 @@ import React, { useState } from "react";
 import "./globals.css";
 
 const FetchApi = () => {
-  const [country, setCountry] = useState("");
-  const [state, setState] = useState("");
+  const [query, setQuery] = useState("");
   const [weatherData, setWeatherData] = useState(null);
+
+  const apiKey = "b5f63057c58a389cdec0f9a779d35fda";
 
   const handleSubmit = async (e: any) => {
     e.preventDefault();
     const response = await fetch(
-      `https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/${state},${country}?key=AEU7VXQXXZEC6YUH543GNNZ8M`
+      `https://api.openweathermap.org/data/2.5/weather?q=${query}&units=metric&lang=en&appid=${apiKey}`
     );
     const data = await response.json();
     setWeatherData(data);
@@ -24,55 +25,54 @@ const FetchApi = () => {
           onSubmit={handleSubmit}
         >
           <h1 className="text-white font-bold  my-4">Weather Details</h1>
+
           <label>
-            COUNTRY:
+            CITY :
             <input
               type="text"
-              className="text-black rounded-xl p-2 mx-1"
-              placeholder="Country"
-              value={country}
-              onChange={(e) => setCountry(e.target.value)}
+              placeholder="City"
+              className="text-black rounded-xl p-2 mx-3"
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
             />
           </label>
+          <br />
+          <button className="text-white" type="submit">
+            <span className="box">Submit</span>
+          </button>
           <hr />
           <br />
-
-          <label>
-            STATE:
-            <input
-              type="text"
-              placeholder="State"
-              className="text-black rounded-xl p-2 mx-3"
-              value={state}
-              onChange={(e) => setState(e.target.value)}
-            />
-          </label>
-          <br />
-          <button
-            className="bg-white hover:bg-blue-400 text-black p-3 rounded-2xl"
-            type="submit"
-          >
-            Submit
-          </button>
         </form>
         {weatherData && (
-          <div className="text-white flex flex-col justify-center">
-            {weatherData.days.map((day: any) => (
-              <div key={day.datetime}>
-                <h2>Date: {day.datetime}</h2>
-                <p>
-                  Temperature:{" "}
-                  <span>{(((day.temp - 32) * 5) / 9).toFixed(2)}</span>°C
+          <div className="bg-white flex flex-col items-center justify-center rounded-3xl card w-96 bg-base-100 shadow-xl">
+            <div className="card-body">
+              <div>
+                <p className="card-title">
+                  Description: {weatherData.weather[0].description}
                 </p>
-
-                <p>Description: {day.description}</p>
-                <p>Humidity: {day.humidity}%</p>
-                <p>Wind Speed:{day.windspeed} </p>
+                <p>Temperature: {weatherData.main.temp.toFixed(2)}°C</p>
+                <p>Humidity: {weatherData.main.humidity}%</p>
+                <p>Condition: {weatherData.weather[0].main}</p>
+                <div className="flex card card-compact w-96 bg-base-100 shadow-xl">
+                  <div className="card-body">
+                    <h2 className="card-title">Wind Speed</h2>
+                    <p> {weatherData.wind.speed} km/h</p>
+                    <figure>
+                      <img
+                        src={`http://openweathermap.org/img/wn/${weatherData.weather[0].icon}@4x.png`}
+                        alt="icon"
+                      />
+                    </figure>
+                  </div>
+                </div>
               </div>
-            ))}
+            </div>
           </div>
         )}
       </div>
+      <h3 className="text-red-600 absolute bottom-1">
+        NOTE: THIS IS NOT 100% ACCURATE DATA
+      </h3>
     </>
   );
 };
