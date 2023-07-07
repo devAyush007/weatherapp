@@ -60,8 +60,8 @@ const FetchApi = () => {
                       src={`http://openweathermap.org/img/wn/${weatherData.weather[0].icon}@4x.png`}
                       alt="Weather Icon"
                       className="mt-4"
-                      height={80}
-                      width={80}
+                      height={150}
+                      width={150}
                     />
                   </figure>
                 </div>
