@@ -9,7 +9,7 @@ const FetchApi = () => {
 
   const apiKey = "b5f63057c58a389cdec0f9a779d35fda";
 
-  const handleSubmit = async (e: any) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     const response = await fetch(
       `https://api.openweathermap.org/data/2.5/weather?q=${query}&units=metric&lang=en&appid=${apiKey}`
